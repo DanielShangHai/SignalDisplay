@@ -1,0 +1,97 @@
+-------------------------------------------------------------------------------
+--  Timing Generator
+-------------------------------------------------------------------------------
+--
+-- $Id: TimingGenerator.vhd,v 1.1 2008/09/23 14:55:44 Yu_Ray Exp $
+--
+-- Generate a programmable period timing signal
+--
+--	FILE			CrescendoIO.VHD
+--	Written by   	John Dowdell
+--	Started			28 Feb 2006	
+--	Latest Update	28 Feb 2006
+-------------------------------------------------------------------------------
+
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.std_logic_unsigned.all;
+use IEEE.std_logic_arith.all;
+
+entity TimingGenerator is					
+	generic (
+		WidthInBits			: 	integer := 24;
+		DefaultPeriod		: 	integer := 100
+	);
+					
+	port (
+		clk					: 	in std_logic;	
+		reset				: 	in std_logic;
+		
+		ce					: 	in std_logic;
+		
+		period				: 	in std_logic_vector((WidthInBits-1) downto 0) := CONV_STD_LOGIC_VECTOR(DefaultPeriod, WidthInBits);
+		enable				: 	in std_logic;
+		
+		strobe				: 	out	std_logic;	-- single clock width strobe at rate expected
+		sig					: 	out std_logic	-- 50% duty cycle signal at strobe period 
+	);
+end TimingGenerator;
+
+architecture RTL of TimingGenerator is
+	
+	constant period_of_1 	: 	std_logic_vector((WidthInBits-1) downto 0) := CONV_STD_LOGIC_VECTOR(1, WidthInBits);
+	
+	signal counter			: std_logic_vector((WidthInBits-1) downto 0);
+	signal halfPeriod 		: std_logic_vector((WidthInBits-1) downto 0);
+
+begin
+
+	-- right shift period to give mid-point
+	halfPeriod <= '0' & period((WidthInBits-1) downto 1);
+
+	-- count when enabled up to specified period
+	process (clk, reset)
+	begin
+		if reset='1' then
+			counter <= (others=>'0');
+			strobe <= '0';
+			sig <= '0';
+		elsif rising_edge(clk) then
+			if period <= period_of_1 then
+				-- if period is <= 1 hold in effective reset as not enough clocks to generating output square wave
+				counter <= (others=>'0');
+				strobe <= '0';
+				sig <= '0';
+			elsif enable='0' then
+				-- if disabled hold in effective reset
+				counter <= period-1;
+				strobe <= '0';	
+				sig <= '0';
+			elsif ce='1' then
+				-- only when clock enabled ...
+				if counter = 0 then
+					-- reload counter and toggle output
+					counter <= period-1;
+				else
+					counter <= counter - 1;
+				end if;
+				
+				if counter=1 then
+					-- strobe at end of cycle
+					strobe <= '1';
+				else
+					strobe <= '0';
+				end if;
+				
+				if counter=0 then
+					-- 50% duty cycle signal off at start of cycle
+					sig <= '0';
+				elsif counter=halfPeriod then
+					-- 50% duty cycle signal on at half-cycle
+					sig <= '1';
+				end if;
+			end if;
+		end if;
+	end process;
+
+end RTL;

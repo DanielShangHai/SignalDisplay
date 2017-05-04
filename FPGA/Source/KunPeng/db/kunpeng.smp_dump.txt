@@ -1,0 +1,88 @@
+
+State Machine - |kunpeng|SerialSPIinterface:inst|Par2Ser:inst59|state
+Name state.Acknowledge state.Stop state.DataBits state.Start state.Pre_start_Ack state.Pre_start_Ack1 state.Pre_start state.Idle 
+state.Idle 0 0 0 0 0 0 0 0 
+state.Pre_start 0 0 0 0 0 0 1 1 
+state.Pre_start_Ack1 0 0 0 0 0 1 0 1 
+state.Pre_start_Ack 0 0 0 0 1 0 0 1 
+state.Start 0 0 0 1 0 0 0 1 
+state.DataBits 0 0 1 0 0 0 0 1 
+state.Stop 0 1 0 0 0 0 0 1 
+state.Acknowledge 1 0 0 0 0 0 0 1 
+
+State Machine - |kunpeng|SerialSPIinterface:inst|Par2Ser:inst59|DataFetch_state
+Name DataFetch_state.WaitPushAck DataFetch_state.WaitPopAck DataFetch_state.Idle 
+DataFetch_state.Idle 0 0 0 
+DataFetch_state.WaitPopAck 0 1 1 
+DataFetch_state.WaitPushAck 1 0 1 
+
+State Machine - |kunpeng|SerialSPIinterface:inst|Ser2Par:inst52|hsstate
+Name hsstate.hsWaitNoAck hsstate.hsAcknowledge hsstate.hsIdle 
+hsstate.hsIdle 0 0 0 
+hsstate.hsAcknowledge 0 1 1 
+hsstate.hsWaitNoAck 1 0 1 
+
+State Machine - |kunpeng|SerialSPIinterface:inst|Ser2Par:inst52|state
+Name state.Stop state.DataBits state.Start state.Idle 
+state.Idle 0 0 0 0 
+state.Start 0 0 1 1 
+state.DataBits 0 1 0 1 
+state.Stop 1 0 0 1 
+
+State Machine - |kunpeng|SerialSPIinterface:inst|Serial2SPI:inst70|state
+Name state.SendLSBWaitAck state.SendLSB state.SendMSBWaitAck state.SendMSB state.SPI_D0b state.SPI_D0a state.SPI_D1b state.SPI_D1a state.SPI_D2b state.SPI_D2a state.SPI_D3b state.SPI_D3a state.SPI_D4b state.SPI_D4a state.SPI_D5b state.SPI_D5a state.SPI_D6b state.SPI_D6a state.SPI_D7b state.SPI_D7a state.AckDataLSB state.DecodeLSB state.WaitLSB state.AckDataMSB state.SendSymbolWaitAck state.SendSymbol state.AckSymbol state.DecodeMSB state.WaitMSB 
+state.WaitMSB 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+state.DecodeMSB 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+state.AckSymbol 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+state.SendSymbol 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+state.SendSymbolWaitAck 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+state.AckDataMSB 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+state.WaitLSB 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+state.DecodeLSB 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+state.AckDataLSB 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+state.SPI_D7a 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+state.SPI_D7b 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D6a 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D6b 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D5a 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D5b 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D4a 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D4b 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D3a 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D3b 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D2a 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D2b 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D1a 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D1b 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D0a 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SPI_D0b 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SendMSB 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SendMSBWaitAck 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SendLSB 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SendLSBWaitAck 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+
+State Machine - |kunpeng|KunPengSPI:SPI_PROTOCOL|state
+Name state.SRAMWrDataRest state.SRAMWrDataFirst state.SRAMWrAddrB2 state.SRAMWrAddrB1 state.SRAMWrAddrB0 state.SRAMRdDataRest state.SRAMRdPad state.SRAMRdAddrB2 state.SRAMRdAddrB1 state.SRAMRdAddrB0 state.DumpRdData state.DumpRdPad state.RdData state.RdPad state.RdBase state.RdLengthM state.RdLengthL state.Finished state.WrData state.WrBase state.WrLengthM state.WrLengthL state.Command 
+state.Command 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+state.WrLengthL 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+state.WrLengthM 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+state.WrBase 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+state.WrData 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+state.Finished 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+state.RdLengthL 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+state.RdLengthM 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+state.RdBase 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+state.RdPad 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+state.RdData 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+state.DumpRdPad 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+state.DumpRdData 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SRAMRdAddrB0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SRAMRdAddrB1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SRAMRdAddrB2 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SRAMRdPad 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SRAMRdDataRest 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SRAMWrAddrB0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SRAMWrAddrB1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SRAMWrAddrB2 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SRAMWrDataFirst 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+state.SRAMWrDataRest 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 

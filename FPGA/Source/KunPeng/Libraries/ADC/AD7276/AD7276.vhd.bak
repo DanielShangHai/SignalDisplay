@@ -1,0 +1,18 @@
+-------------------------------------------------------------------------------
+--  12-bit ADC AD7276
+-------------------------------------------------------------------------------
+--
+-- $Id: AD7276.vhd,v 1.0 2014/07/31 09:11:21 Bill_Chen Exp $
+--
+-- 12-bit ADC AD7276
+--
+--	FILE				MAX11646EUA.vhd,v
+--	Written by   	Bill Chen
+--	Started			31 Jun 2014	
+--	Latest Update	31 Jun 2014
+-------------------------------------------------------------------------------
+
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.std_logic_unsigned.all;
+use IEEE.std_logic_arith.all;
