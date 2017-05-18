@@ -448,7 +448,7 @@ begin
 					 addressEndCh0(20 downto 0) <= addr_e_ch0(11 downto 0) & b"000000000" ;
 					 halfSampleLen0(31 downto 0) <= '0'&sampleLen_ch0(31 downto 1);
 					 if mode0 = b"00000000" then  -- single sample
-					    if sampleLen_ch0 < x"0000FFFF"
+					    if sampleLen_ch0 < x"0000FFFF" then
 						    interruptThreshold0(31 downto 0) <= sampleLen_ch0(31 downto 0);
 						 else
 						    interruptThreshold0(31 downto 0) <= '0'&sampleLen_ch0(31 downto 1);
