@@ -568,7 +568,7 @@ agreement for further details.
 	(input)
 	(rect 960 64 1184 80)
 	(text "INPUT" (rect 181 0 209 10)(font "Arial" (font_size 6)))
-	(text "SAMPLE_LEN_CH0[31..0]" (rect 5 0 135 12)(font "Arial" ))
+	(text "SAMPLE_LEN_CH0[31..0]" (rect 5 0 134 12)(font "Arial" ))
 	(pt 224 8)
 	(drawing
 		(line (pt 140 12)(pt 165 12))
@@ -584,7 +584,7 @@ agreement for further details.
 	(input)
 	(rect 960 80 1184 96)
 	(text "INPUT" (rect 181 0 209 10)(font "Arial" (font_size 6)))
-	(text "SAMPLE_LEN_CH1[31..0]" (rect 5 0 135 12)(font "Arial" ))
+	(text "SAMPLE_LEN_CH1[31..0]" (rect 5 0 134 12)(font "Arial" ))
 	(pt 224 8)
 	(drawing
 		(line (pt 140 12)(pt 165 12))
@@ -600,7 +600,7 @@ agreement for further details.
 	(input)
 	(rect 960 96 1184 112)
 	(text "INPUT" (rect 181 0 209 10)(font "Arial" (font_size 6)))
-	(text "SAMPLE_LEN_CH2[31..0]" (rect 5 0 135 12)(font "Arial" ))
+	(text "SAMPLE_LEN_CH2[31..0]" (rect 5 0 134 12)(font "Arial" ))
 	(pt 224 8)
 	(drawing
 		(line (pt 140 12)(pt 165 12))
@@ -616,7 +616,7 @@ agreement for further details.
 	(input)
 	(rect 960 112 1184 128)
 	(text "INPUT" (rect 181 0 209 10)(font "Arial" (font_size 6)))
-	(text "SAMPLE_LEN_CH3[31..0]" (rect 5 0 135 12)(font "Arial" ))
+	(text "SAMPLE_LEN_CH3[31..0]" (rect 5 0 134 12)(font "Arial" ))
 	(pt 224 8)
 	(drawing
 		(line (pt 140 12)(pt 165 12))
@@ -1937,10 +1937,6 @@ agreement for further details.
 	(pt 504 120)
 )
 (connector
-	(pt 424 528)
-	(pt 576 528)
-)
-(connector
 	(text "clk" (rect -30 144 -16 156)(font "Arial" ))
 	(pt 16 160)
 	(pt -32 160)
@@ -1965,128 +1961,13 @@ agreement for further details.
 	(pt -120 224)
 )
 (connector
-	(pt -104 648)
-	(pt 24 648)
-)
-(connector
-	(text "Sample_start" (rect -102 648 -38 660)(font "Arial" ))
-	(pt 24 664)
-	(pt -104 664)
-)
-(connector
 	(text "Sample_start" (rect -104 24 -40 36)(font "Arial" ))
 	(pt -120 40)
 	(pt -64 40)
 )
 (connector
-	(pt -104 864)
-	(pt 24 864)
-)
-(connector
-	(text "clk" (rect -22 584 -8 596)(font "Arial" ))
-	(pt 24 600)
-	(pt -24 600)
-)
-(connector
-	(text "reset" (rect -22 600 2 612)(font "Arial" ))
-	(pt 24 616)
-	(pt -24 616)
-)
-(connector
-	(text "clk" (rect -22 800 -8 812)(font "Arial" ))
-	(pt 24 816)
-	(pt -24 816)
-)
-(connector
-	(text "reset" (rect -22 816 2 828)(font "Arial" ))
-	(pt 24 832)
-	(pt -24 832)
-)
-(connector
-	(text "Sample_start" (rect -102 864 -38 876)(font "Arial" ))
-	(pt 24 880)
-	(pt -104 880)
-)
-(connector
-	(text "adcData0[15:0]" (rect 802 224 877 236)(font "Arial" ))
-	(pt 792 240)
-	(pt 880 240)
-	(bus)
-)
-(connector
-	(pt 816 208)
-	(pt 792 208)
-)
-(connector
-	(pt 816 152)
-	(pt 816 208)
-)
-(connector
-	(pt 800 192)
-	(pt 792 192)
-)
-(connector
-	(pt 800 136)
-	(pt 800 192)
-)
-(connector
-	(text "busy_0" (rect 826 208 862 220)(font "Arial" ))
-	(pt 880 224)
-	(pt 792 224)
-)
-(connector
-	(text "newSample0" (rect 802 240 863 252)(font "Arial" ))
-	(pt 792 256)
-	(pt 880 256)
-)
-(connector
-	(pt 568 192)
-	(pt 576 192)
-)
-(connector
-	(pt 568 96)
-	(pt 568 192)
-)
-(connector
-	(pt 552 208)
-	(pt 576 208)
-)
-(connector
-	(pt 552 120)
-	(pt 552 208)
-)
-(connector
-	(pt 424 224)
-	(pt 576 224)
-)
-(connector
-	(pt 472 240)
-	(pt 576 240)
-)
-(connector
-	(pt 472 272)
-	(pt 472 240)
-)
-(connector
 	(pt 224 160)
 	(pt 424 160)
-)
-(connector
-	(pt 424 160)
-	(pt 424 224)
-)
-(connector
-	(pt 232 600)
-	(pt 256 600)
-)
-(connector
-	(pt 256 600)
-	(pt 256 496)
-)
-(connector
-	(text "clk" (rect 514 480 528 492)(font "Arial" ))
-	(pt 256 496)
-	(pt 576 496)
 )
 (connector
 	(text "reset" (rect 1250 744 1274 756)(font "Arial" ))
@@ -2167,32 +2048,14 @@ agreement for further details.
 	(bus)
 )
 (connector
-	(pt 24 632)
-	(pt -104 632)
-	(bus)
-)
-(connector
-	(pt 24 848)
-	(pt -104 848)
-	(bus)
-)
-(connector
 	(pt 1288 856)
 	(pt 1216 856)
 	(bus)
 )
 (connector
-	(pt 232 816)
-	(pt 256 816)
-)
-(connector
 	(text "clk" (rect 514 632 528 644)(font "Arial" ))
 	(pt 504 648)
 	(pt 576 648)
-)
-(connector
-	(pt 256 816)
-	(pt 256 680)
 )
 (connector
 	(pt 256 680)
@@ -2231,6 +2094,143 @@ agreement for further details.
 	(pt 1648 760)
 	(pt 1680 760)
 	(bus)
+)
+(connector
+	(pt -104 648)
+	(pt 24 648)
+)
+(connector
+	(text "Sample_start" (rect -102 648 -38 660)(font "Arial" ))
+	(pt 24 664)
+	(pt -104 664)
+)
+(connector
+	(pt -104 632)
+	(pt 24 632)
+	(bus)
+)
+(connector
+	(pt -104 848)
+	(pt 24 848)
+	(bus)
+)
+(connector
+	(pt -104 864)
+	(pt 24 864)
+)
+(connector
+	(text "Sample_start" (rect -102 864 -38 876)(font "Arial" ))
+	(pt 24 880)
+	(pt -104 880)
+)
+(connector
+	(pt 256 816)
+	(pt 232 816)
+)
+(connector
+	(pt 256 680)
+	(pt 256 816)
+)
+(connector
+	(text "reset" (rect -102 816 -78 828)(font "Arial" ))
+	(pt 24 832)
+	(pt -104 832)
+)
+(connector
+	(text "clk" (rect -102 800 -88 812)(font "Arial" ))
+	(pt 24 816)
+	(pt -104 816)
+)
+(connector
+	(text "reset" (rect -102 600 -78 612)(font "Arial" ))
+	(pt 24 616)
+	(pt -104 616)
+)
+(connector
+	(text "clk" (rect -102 584 -88 596)(font "Arial" ))
+	(pt 24 600)
+	(pt -104 600)
+)
+(connector
+	(pt 232 600)
+	(pt 256 600)
+)
+(connector
+	(text "clk" (rect 514 480 528 492)(font "Arial" ))
+	(pt 576 496)
+	(pt 504 496)
+)
+(connector
+	(pt 256 600)
+	(pt 256 528)
+)
+(connector
+	(pt 256 528)
+	(pt 576 528)
+)
+(connector
+	(text "adcData0[15:0]" (rect 802 224 877 236)(font "Arial" ))
+	(pt 792 240)
+	(pt 880 240)
+	(bus)
+)
+(connector
+	(pt 816 208)
+	(pt 792 208)
+)
+(connector
+	(pt 816 152)
+	(pt 816 208)
+)
+(connector
+	(pt 800 192)
+	(pt 792 192)
+)
+(connector
+	(pt 800 136)
+	(pt 800 192)
+)
+(connector
+	(text "busy_0" (rect 826 208 862 220)(font "Arial" ))
+	(pt 880 224)
+	(pt 792 224)
+)
+(connector
+	(text "newSample0" (rect 802 240 863 252)(font "Arial" ))
+	(pt 792 256)
+	(pt 880 256)
+)
+(connector
+	(pt 568 192)
+	(pt 576 192)
+)
+(connector
+	(pt 568 96)
+	(pt 568 192)
+)
+(connector
+	(pt 552 208)
+	(pt 576 208)
+)
+(connector
+	(pt 552 120)
+	(pt 552 208)
+)
+(connector
+	(pt 424 224)
+	(pt 576 224)
+)
+(connector
+	(pt 472 240)
+	(pt 576 240)
+)
+(connector
+	(pt 472 272)
+	(pt 472 240)
+)
+(connector
+	(pt 424 160)
+	(pt 424 224)
 )
 (connector
 	(text "adcData0[15:0]" (rect 1192 200 1267 212)(font "Arial" ))
@@ -2350,6 +2350,11 @@ agreement for further details.
 	(pt 1192 232)
 )
 (connector
+	(pt 1176 280)
+	(pt 1280 280)
+	(bus)
+)
+(connector
 	(pt 1176 296)
 	(pt 1280 296)
 	(bus)
@@ -2382,10 +2387,5 @@ agreement for further details.
 (connector
 	(pt 1192 584)
 	(pt 1280 584)
-	(bus)
-)
-(connector
-	(pt 1280 280)
-	(pt 1176 280)
 	(bus)
 )

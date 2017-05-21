@@ -444,21 +444,25 @@ begin
 		elsif rising_edge(clk) then
          if (SAMPLE_STARTB='1') and (SAMPLE_STARTC='0') then 
 			    if enabled_ch0 = '1' then
+				 --  21 BITS                                 12BITS         9BITS
 				    addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
 					 addressEndCh0(20 downto 0) <= addr_e_ch0(11 downto 0) & b"000000000" ;
 					 halfSampleLen0(31 downto 0) <= '0'&sampleLen_ch0(31 downto 1);
 					 if mode0 = b"00000000" then  -- single sample
+					 -- 65535
 					    if sampleLen_ch0 < x"0000FFFF" then
 						    interruptThreshold0(31 downto 0) <= sampleLen_ch0(31 downto 0);
 						 else
-						    interruptThreshold0(31 downto 0) <= '0'&sampleLen_ch0(31 downto 1);
-						 end if;
-					    
-					 elsif mode0 = b"00000001" then --serious sampling;
+						    if halfSampleLen0(31 downto 0) < x"0000FFFF"
+							    interruptThreshold0(31 downto 0) <= halfSampleLen0(31 downto 0);
+							 else
+							    interruptThreshold0(31 downto 0) <= x"0000FFFF";
+							 end if;							 
+						    --interruptThreshold0(31 downto 0) <= '0'&sampleLen_ch0(31 downto 1);
+						 end if;					    
+					 elsif mode0 = b"00000001" then --continuous sampling;
 					    interruptThreshold0 <= x"0000FFFF";
-					 end if;
-					 
-					 
+					 end if;					 
 				 end if;
 			    if enabled_ch1 = '1' then
 				    addressCh1(20 downto 0) <= addr_s_ch1(11 downto 0) & b"000000000" ;
@@ -481,9 +485,9 @@ begin
 					    if 
 					 
 					 else 
-					    if mode0 = b"00000000" then 
+					    if mode0 = b"00000000" then  -- single sample
 						    -- sample_stop0 = '1' ;
-						 elsif mode0 = b"00000001" then
+						 elsif mode0 = b"00000001" then  --continuous sampling;
 						 
 						 end if			 
 					 end if;

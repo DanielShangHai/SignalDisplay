@@ -324,7 +324,7 @@ architecture RTL of KunPengSPI is
 
 	signal s_SRAMWrAddr	: std_logic_vector(21 downto 0);
 	signal DepWrAddr : std_logic_vector(9 downto 0);	-- which 16 byte chunk of dependency table, bit 9 is overflow
-	signal s_RasterSelWrAddr : std_logic_vector(13 downto 0);
+--	signal s_RasterSelWrAddr : std_logic_vector(13 downto 0);
 	signal rmDoWrite, rmSRAMWrite, rmSRAMWriteA, rmSRAMWriteB, rmSRAMWriteC : std_logic;
 
 	signal writecount : std_logic_vector(11 downto 0);		-- used to count bytes writing raster to memories
@@ -600,71 +600,71 @@ begin
 --t		end case;
 --t	end process;
 
-	process (spi_sclk, spi_nss)
-	begin
-		if spi_nss='1' then
-			rmSRAMWrite <= '0';
-		elsif rising_edge(spi_sclk) then
-			rmSRAMWrite <= byteStrobe and rmDoWrite;
-		end if;
-	end process;
+--	process (spi_sclk, spi_nss)
+--	begin
+--		if spi_nss='1' then
+--			rmSRAMWrite <= '0';
+--		elsif rising_edge(spi_sclk) then
+--			rmSRAMWrite <= byteStrobe and rmDoWrite;
+--		end if;
+--	end process;
 
 
 
-	process (state, s_SRAMWrAddr)
-	begin
-		case state is
+--	process (state, s_SRAMWrAddr)
+--	begin
+--		case state is
 	
-			when SRAMRdPad =>
-				pdDoWrite <= '1';				
-			when SRAMRdDataRest =>
-				pdDoWrite <= '1';				
-			when SRAMWrDataFirst =>
-				pdDoWrite <= '1';				
-			when SRAMWrDataRest =>
-				pdDoWrite <= '1';				
-			when others => 
-				pdDoWrite <= '0';				
-		end case;
-	end process;
+--			when SRAMRdPad =>
+--				pdDoWrite <= '1';				
+--			when SRAMRdDataRest =>
+--				pdDoWrite <= '1';				
+--			when SRAMWrDataFirst =>
+--				pdDoWrite <= '1';				
+--			when SRAMWrDataRest =>
+--				pdDoWrite <= '1';				
+--			when others => 
+--				pdDoWrite <= '0';				
+--		end case;
+--	end process;
 
 	-- generate a strobe that indicates a write to SRAM should be performed
-	process (spi_sclk, spi_nss)
-	begin
-		if spi_nss='1' then
-			SRAMWrite <= '0';
-		elsif rising_edge(spi_sclk) then
-			SRAMWrite <= byteStrobe and pdDoWrite;
-		end if;
-	end process;
+--	process (spi_sclk, spi_nss)
+--	begin
+--		if spi_nss='1' then
+--			SRAMWrite <= '0';
+--		elsif rising_edge(spi_sclk) then
+--			SRAMWrite <= byteStrobe and pdDoWrite;
+--		end if;
+--	end process;
 
 	-- synchronise SRAMWrite to clock and remember previous values so we can see edge
-	process (clk, reset)
-	begin
-		if reset='1' then
-			SRAMWriteA <= '0';
-			SRAMWriteB <= '0';
-			SRAMWriteC <= '0';
-		elsif rising_edge(clk) then
-			SRAMWriteA <= SRAMWrite;
-			SRAMWriteB <= SRAMWriteA;
-			SRAMWriteC <= SRAMWriteB;
-		end if;
-	end process;
+--	process (clk, reset)
+--	begin
+--		if reset='1' then
+--			SRAMWriteA <= '0';
+--			SRAMWriteB <= '0';
+--			SRAMWriteC <= '0';
+--		elsif rising_edge(clk) then
+--			SRAMWriteA <= SRAMWrite;
+--			SRAMWriteB <= SRAMWriteA;
+--			SRAMWriteC <= SRAMWriteB;
+--		end if;
+--	end process;
 
 	-- generate SRAM write strobe: assert on the rising edge of SRAMWrite and de-assert when SRAMStart asserted
-	process (clk, reset)
-	begin
-		if reset='1' then
-			SRAMStrobe <= '0';
-		elsif rising_edge(clk) then
-			if (SRAMWriteB='1') and (SRAMWriteC='0') then	
-				SRAMStrobe <= '1';
-			elsif SRAMStart='1' then
-				SRAMStrobe <= '0';
-			end if;
-		end if;
-	end process;
+--	process (clk, reset)
+--	begin
+--		if reset='1' then
+--			SRAMStrobe <= '0';
+--		elsif rising_edge(clk) then
+--			if (SRAMWriteB='1') and (SRAMWriteC='0') then	
+--				SRAMStrobe <= '1';
+--			elsif SRAMStart='1' then
+--				SRAMStrobe <= '0';
+--			end if;
+--		end if;
+--	end process;
 	
 		
 	-- parameter writes

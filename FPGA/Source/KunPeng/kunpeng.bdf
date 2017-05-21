@@ -109,7 +109,7 @@ agreement for further details.
 	(input)
 	(rect 872 256 1040 272)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
-	(text "ADC_DATA0" (rect 5 0 69 12)(font "Arial" ))
+	(text "ADC_DATA0" (rect 5 0 68 12)(font "Arial" ))
 	(pt 168 8)
 	(drawing
 		(line (pt 84 12)(pt 109 12))
@@ -125,7 +125,7 @@ agreement for further details.
 	(input)
 	(rect 872 320 1040 336)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
-	(text "ADC_DATA1" (rect 5 0 69 12)(font "Arial" ))
+	(text "ADC_DATA1" (rect 5 0 68 12)(font "Arial" ))
 	(pt 168 8)
 	(drawing
 		(line (pt 84 12)(pt 109 12))
@@ -141,7 +141,7 @@ agreement for further details.
 	(input)
 	(rect 872 400 1040 416)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
-	(text "ADC_DATA2" (rect 5 0 69 12)(font "Arial" ))
+	(text "ADC_DATA2" (rect 5 0 68 12)(font "Arial" ))
 	(pt 168 8)
 	(drawing
 		(line (pt 84 12)(pt 109 12))
@@ -157,7 +157,7 @@ agreement for further details.
 	(input)
 	(rect 872 544 1040 560)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
-	(text "ADC_DATA3" (rect 5 0 69 12)(font "Arial" ))
+	(text "ADC_DATA3" (rect 5 0 68 12)(font "Arial" ))
 	(pt 168 8)
 	(drawing
 		(line (pt 84 12)(pt 109 12))
@@ -173,7 +173,7 @@ agreement for further details.
 	(input)
 	(rect 872 576 1040 592)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
-	(text "ISA_CS" (rect 5 0 44 12)(font "Arial" ))
+	(text "ISA_CS" (rect 5 0 43 12)(font "Arial" ))
 	(pt 168 8)
 	(drawing
 		(line (pt 84 12)(pt 109 12))
@@ -189,7 +189,7 @@ agreement for further details.
 	(input)
 	(rect 872 592 1040 608)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
-	(text "ISA_ADV" (rect 5 0 53 12)(font "Arial" ))
+	(text "ISA_ADV" (rect 5 0 52 12)(font "Arial" ))
 	(pt 168 8)
 	(drawing
 		(line (pt 84 12)(pt 109 12))
@@ -205,7 +205,7 @@ agreement for further details.
 	(input)
 	(rect 872 608 1040 624)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
-	(text "ISA_WE" (rect 5 0 47 12)(font "Arial" ))
+	(text "ISA_WE" (rect 5 0 46 12)(font "Arial" ))
 	(pt 168 8)
 	(drawing
 		(line (pt 84 12)(pt 109 12))
@@ -221,7 +221,7 @@ agreement for further details.
 	(input)
 	(rect 872 624 1040 640)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
-	(text "ISA_RD" (rect 5 0 46 12)(font "Arial" ))
+	(text "ISA_RD" (rect 5 0 45 12)(font "Arial" ))
 	(pt 168 8)
 	(drawing
 		(line (pt 84 12)(pt 109 12))
@@ -232,6 +232,22 @@ agreement for further details.
 		(line (pt 109 12)(pt 113 8))
 	)
 	(text "VCC" (rect 128 7 148 17)(font "Arial" (font_size 6)))
+)
+(pin
+	(input)
+	(rect 24 440 224 456)
+	(text "INPUT" (rect 157 0 185 10)(font "Arial" (font_size 6)))
+	(text "CONFIG_BITS[7..0]" (rect 5 0 105 12)(font "Arial" ))
+	(pt 200 8)
+	(drawing
+		(line (pt 116 12)(pt 141 12))
+		(line (pt 116 4)(pt 141 4))
+		(line (pt 145 8)(pt 200 8))
+		(line (pt 116 12)(pt 116 4))
+		(line (pt 141 4)(pt 145 8))
+		(line (pt 141 12)(pt 145 8))
+	)
+	(text "VCC" (rect 160 7 180 17)(font "Arial" (font_size 6)))
 )
 (pin
 	(output)
@@ -2761,12 +2777,6 @@ agreement for further details.
 	(pt 1056 680)
 )
 (connector
-	(text "CH3SRATE[31..0]" (rect 1066 632 1155 644)(font "Arial" ))
-	(pt 1176 648)
-	(pt 1056 648)
-	(bus)
-)
-(connector
 	(pt 1040 584)
 	(pt 1176 584)
 )
@@ -3333,6 +3343,22 @@ agreement for further details.
 	(text "RAM_DATA[15..0]" (rect 2066 688 2155 700)(font "Arial" ))
 	(pt 2240 704)
 	(pt 2056 704)
+	(bus)
+)
+(connector
+	(pt 224 448)
+	(pt 312 448)
+	(bus)
+)
+(connector
+	(text "DAQ_START[0]" (rect 1066 104 1142 116)(font "Arial" ))
+	(pt 1176 120)
+	(pt 1056 120)
+)
+(connector
+	(text "CH3SRATE[31..0]" (rect 1066 632 1155 644)(font "Arial" ))
+	(pt 1176 648)
+	(pt 1056 648)
 	(bus)
 )
 (junction (pt 176 -144))
