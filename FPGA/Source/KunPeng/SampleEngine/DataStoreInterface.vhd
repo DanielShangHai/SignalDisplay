@@ -124,6 +124,11 @@ architecture RTL of DataStoreInterface is
 	signal addressCh1  : std_logic_vector(20 downto 0);
 	signal addressCh2  : std_logic_vector(20 downto 0);
 	signal addressCh3  : std_logic_vector(20 downto 0);
+
+	signal addressCh0_buf2  : std_logic_vector(20 downto 0);
+	signal addressCh1_buf2  : std_logic_vector(20 downto 0);
+	signal addressCh2_buf2  : std_logic_vector(20 downto 0);
+	signal addressCh3_buf2  : std_logic_vector(20 downto 0);	
 	
 	signal addressEndCh0  : std_logic_vector(20 downto 0);
 	signal addressEndCh1  : std_logic_vector(20 downto 0);
@@ -138,6 +143,12 @@ architecture RTL of DataStoreInterface is
 	signal sample_count2  : std_logic_vector(31 downto 0);
 	signal sample_count3  : std_logic_vector(31 downto 0);
 	
+	signal sample_countInBuffer0  : std_logic_vector(31 downto 0);
+	signal sample_countInBuffer1  : std_logic_vector(31 downto 0);
+	signal sample_countInBuffer2  : std_logic_vector(31 downto 0);
+	signal sample_countInBuffer3  : std_logic_vector(31 downto 0);	
+	
+	
 	signal halfSampleLen0 : std_logic_vector(31 downto 0);
 	signal halfSampleLen1 : std_logic_vector(31 downto 0);
 	signal halfSampleLen2 : std_logic_vector(31 downto 0);
@@ -148,6 +159,10 @@ architecture RTL of DataStoreInterface is
 	signal interruptLevel2 : std_logic_vector(31 downto 0);
 	signal interruptLevel3 : std_logic_vector(31 downto 0);
 
+	signal EndSample0 : std_logic;
+	signal EndSample1 : std_logic;
+	signal EndSample2 : std_logic;
+	signal EndSample3 : std_logic;	
 	
 	
 	type states is (IDLE, CheckDataCh0,WriteDataCh0toRAM,TimeGap0,
@@ -442,48 +457,85 @@ begin
 		   addressCh2 <= (others => '0');
          addressCh3 <= (others => '0');
 		elsif rising_edge(clk) then
+		   EndSample0 <= '0';
          if (SAMPLE_STARTB='1') and (SAMPLE_STARTC='0') then 
 			    if enabled_ch0 = '1' then
+				    sample_countInBuffer0 <= x"00000000";
+					 sample_count0 <= x"00000000";
 				 --  21 BITS                                 12BITS         9BITS
 				    addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
+					 addressCh0_buf2(20 downto 0) <= '0'&addr_s_ch0(10 downto 1)& b"000000000" + '0'&addr_e_ch0(10 downto 1)& b"000000000";
 					 addressEndCh0(20 downto 0) <= addr_e_ch0(11 downto 0) & b"000000000" ;
 					 halfSampleLen0(31 downto 0) <= '0'&sampleLen_ch0(31 downto 1);
 					 if mode0 = b"00000000" then  -- single sample
 					 -- 65535
-					    if sampleLen_ch0 < x"0000FFFF" then
+					    if sampleLen_ch0 < x"00008000" then   --32K Bytes
 						    interruptThreshold0(31 downto 0) <= sampleLen_ch0(31 downto 0);
 						 else
-						    if halfSampleLen0(31 downto 0) < x"0000FFFF"
+						    if halfSampleLen0(31 downto 0) < x"00008000"
 							    interruptThreshold0(31 downto 0) <= halfSampleLen0(31 downto 0);
 							 else
-							    interruptThreshold0(31 downto 0) <= x"0000FFFF";
+							    interruptThreshold0(31 downto 0) <= x"00008000";
 							 end if;							 
 						    --interruptThreshold0(31 downto 0) <= '0'&sampleLen_ch0(31 downto 1);
 						 end if;					    
 					 elsif mode0 = b"00000001" then --continuous sampling;
-					    interruptThreshold0 <= x"0000FFFF";
+					    interruptThreshold0 <= x"00008000";
 					 end if;					 
 				 end if;
 			    if enabled_ch1 = '1' then
+				    sample_countInBuffer1 <= x"00000000";
+					 sample_count1 <= x"00000000";
 				    addressCh1(20 downto 0) <= addr_s_ch1(11 downto 0) & b"000000000" ;
 					 addressEndCh1(20 downto 0) <= addr_e_ch1(11 downto 0) & b"000000000" ;
 					 halfSampleLen1(31 downto 0) <= '0'&sampleLen_ch1(31 downto 1);
 				 end if;
 			    if enabled_ch2 = '1' then
+				    sample_countInBuffer2 <= x"00000000";
+					 sample_count2 <= x"00000000";
 				    addressCh2(20 downto 0) <= addr_s_ch2(11 downto 0) & b"000000000" ;
 					 addressEndCh2(20 downto 0) <= addr_e_ch2(11 downto 0) & b"000000000" ;
 					 halfSampleLen2(31 downto 0) <= '0'&sampleLen_ch2(31 downto 1);
 				 end if;
 			    if enabled_ch3 = '1' then
+				    sample_countInBuffer3 <= x"00000000";
+					 sample_count3 <= x"00000000";				 
 				    addressCh3(20 downto 0) <= addr_s_ch3(11 downto 0) & b"000000000" ;
 					 addressEndCh3(20 downto 0) <= addr_e_ch3(11 downto 0) & b"000000000" ;
 					 halfSampleLen3(31 downto 0) <= '0'&sampleLen_ch3(31 downto 1);
 				 end if;				 
 		   elsif (RAM_STROBE = '1') and (RAM_WRITE = '1') then
 			    if (enabled_ch0 = '1') and (currentchannel = b"0001") then
+				    --if mode0 = b"00000000" then  -- single sample
+					    if sample_countInBuffer0 < interruptThreshold0 - 1 then 
+						    sample_countInBuffer0 <= sample_countInBuffer0 + 1;
+							 --if addressCh0(20 downto 0) < addr_e_ch0(20 downto 0) then 
+					       addressCh0(20 downto 0) <= addressCh0(20 downto 0) + 1;
+					       --else
+					       --   addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
+					       --end if
+					    else
+						    sample_countInBuffer0 <= x"00000000";
+							 raiseInterrupt0 <= 1;
+						 end if;				 
+					 --elsif mode0 = b"00000001" then --continuous sampling; 
+					 --end if;
+				        if sample_count0 < sampleLen_ch0 - 1 then
+						     sample_count0 <= sample_count0 + 1;
+						  else
+						     sample_count0 <= x"00000000";
+							  raiseInterrupt0 <= '1';
+							  if mode0 = b"00000000" then  -- single sample
+							     EndSample0 <= '1';
+							  end if;
+						  end if;
+				 
 				    if sample_count0 < interruptThreshold0 - 1 then 
-					    if 
-					 
+				       if addressCh0(20 downto 0) < addr_e_ch0(20 downto 0) then 
+					       addressCh0(20 downto 0) <= addressCh0(20 downto 0) + 1;
+					    else
+					       addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
+					    end if
 					 else 
 					    if mode0 = b"00000000" then  -- single sample
 						    -- sample_stop0 = '1' ;
@@ -491,8 +543,13 @@ begin
 						 
 						 end if			 
 					 end if;
-				 
+				    
 				    sample_count0 <= sample_count0 + 1;
+					 if sample_countInBuffer1 < x"00008000" - 1
+					    sample_countInBuffer1 <= sample_countInBuffer1 + 1;
+					 else
+					    sample_countInBuffer1 <= x"00000000";
+					 end if;
 				    if (addressCh0(20 downto 0) < addr_e_ch0(20 downto 0)) then 
 					     addressCh0(20 downto 0) <= addressCh0(20 downto 0) + 1;
 					 else
