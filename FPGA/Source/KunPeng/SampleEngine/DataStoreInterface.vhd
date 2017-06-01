@@ -527,11 +527,12 @@ begin
 						 else
 						    if currbuff_ch0 = 0 then
 							    currbuff_ch0 <= 1; 
+								 addressCh0(20 downto 0) <= addressCh0(20 downto 0) + 1;
 							 else
 							    currbuff_ch0 <= 0;
+								 addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
 							 end if;
-						    sample_count0 <= x"00000000";
-							 addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
+						    sample_count0 <= x"00000000";							 
 							 raiseInterrupt0 <= 1;
 						 end if;
 					 
@@ -542,11 +543,13 @@ begin
 						 else
 						    if currbuff_ch0 = 0 then
 							    currbuff_ch0 <= 1; 
+								 addressCh0(20 downto 0) <= addressCh0(20 downto 0) + 1;
 							 else
 							    currbuff_ch0 <= 0;
+								 addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
 							 end if;
 						    sample_countInBuffer0 <= x"00000000";
-							 addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
+							 
 							 raiseInterrupt0 <= 1;
 						 end if;
 					    if sample_count0 < sampleLen_ch0 - 1 then
