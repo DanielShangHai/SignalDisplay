@@ -42,7 +42,6 @@ int main( int argc, char *argv[] )
 				printf("writeParams Fail\n");
 			}
 
-			// TODO gpio?
 		} else if (action == 'B') {
 			printf("Please enter length to read:\n");
 			scanf("%d", &length);
