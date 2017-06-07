@@ -237,7 +237,7 @@ agreement for further details.
 	(input)
 	(rect 24 440 224 456)
 	(text "INPUT" (rect 157 0 185 10)(font "Arial" (font_size 6)))
-	(text "CONFIG_BITS[7..0]" (rect 5 0 105 12)(font "Arial" ))
+	(text "CONFIG_BITS[7..0]" (rect 5 0 104 12)(font "Arial" ))
 	(pt 200 8)
 	(drawing
 		(line (pt 116 12)(pt 141 12))
@@ -3244,12 +3244,6 @@ agreement for further details.
 	(bus)
 )
 (connector
-	(text "SAMPLEDATA_ADDR[23..0]" (rect 2066 720 2206 732)(font "Arial" ))
-	(pt 2240 736)
-	(pt 2056 736)
-	(bus)
-)
-(connector
 	(text "RST" (rect 2066 608 2087 620)(font "Arial" ))
 	(pt 2240 624)
 	(pt 2056 624)
@@ -3359,6 +3353,22 @@ agreement for further details.
 	(text "CH3SRATE[31..0]" (rect 1066 632 1155 644)(font "Arial" ))
 	(pt 1176 648)
 	(pt 1056 648)
+	(bus)
+)
+(connector
+	(text "RAM_W_START" (rect 2762 608 2842 620)(font "Arial" ))
+	(pt 2680 624)
+	(pt 2848 624)
+)
+(connector
+	(text "RAM_W_DONE" (rect 2762 624 2839 636)(font "Arial" ))
+	(pt 2680 640)
+	(pt 2848 640)
+)
+(connector
+	(text "SAMPLEDATA_RD_ADDR[23..0]" (rect 2066 720 2228 732)(font "Arial" ))
+	(pt 2240 736)
+	(pt 2056 736)
 	(bus)
 )
 (junction (pt 176 -144))
