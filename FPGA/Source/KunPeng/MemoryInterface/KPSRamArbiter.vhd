@@ -24,18 +24,20 @@ entity KPSRamArbiter is
 		reset			: in	std_logic;
 		clk			: in	std_logic;	-- system 50MHz
 		
-		RAM_ADDR    : in  std_logic_vector(18 downto 0);
-		RAM_STROBE  : in  std_logic;
-		RAM_W       : in  std_logic;
-		RAM_DATA    : in  std_logic_vector(15 downto 0);
-		ISA_MEM_RD_STROBE: in std_logic;
-		SAMPLEDATA_RD_ADDR : in std_logic_vector(23 downto 0);
-		
+		RAM_W_ADDR    : in  std_logic_vector(18 downto 0);
+		RAM_W_STROBE  : in  std_logic;
+		RAM_W_WRITE   : in  std_logic;
+		RAM_W_DATA    : in  std_logic_vector(15 downto 0);
 		RAM_W_START : out std_logic;
-		RAM_W_DONE  : out std_logic;
-		RAM_SAMPLE_RD_DATA : out std_logic_vector(15 downto 0);
-		RAM_SAMPLE_RD_START : out std_logic;
-		RAM_SAMPLE_RD_DONE  : out std_logic;
+		RAM_W_DONE  : out std_logic;	
+		
+		ISA_MEM_RD_STROBE: in std_logic;
+		RAM_SAMPLE_READ_ADDR : in std_logic_vector(23 downto 0);
+		
+
+		RAM_SAMPLE_READ_DATA : out std_logic_vector(15 downto 0);
+		RAM_SAMPLE_READ_START : out std_logic;
+		RAM_SAMPLE_READ_DONE  : out std_logic;
 		
 -- SRAM interface
 		sramAddress		: out	std_logic_vector(18 downto 0);	-- word address
@@ -116,88 +118,87 @@ begin
 			sramWE		<= '0';
 			sramUB		<= '0';
 			sramLB		<= '0';
-			spiRdData	<= (others=>'0');
+--			spiRdData	<= (others=>'0');
 			
+			RAM_W_START <= '0';
+			RAM_W_DONE  <= '0';
 --			spiStart	<= '0';
 --			spiDone		<= '0';
 --			dpRdData	<= (others=>'0');
 --			dpRdStart	<= '0';
 --			dpRdDone	<= '0';
-         RAM_SAMPLE_RD_DATA	<= (others=>'0');
-         RAM_SAMPLE_RD_START <= '0';
-			RAM_SAMPLE_RD_DONE <= '0';
+         RAM_SAMPLE_READ_DATA	<= (others=>'0');
+         RAM_SAMPLE_READ_START <= '0';
+			RAM_SAMPLE_READ_DONE <= '0';
 		elsif rising_edge(clk) then
 			case state is
 				when Idle =>
 					sramWrite <= '0';
 					-- check if either DP or SPI requesting access
-					if ISA_MEM_RD_STROBE='1' then
+					if ISA_MEM_READ_STROBE='1' then
 					   state <= ISARead1;
                elsif RAM_STROBE='1' then
 			         if RAM_W='0' then
 							-- SPI read
 							state <= spiRead1;
 						else
-							-- SPI write
+							-- ADC SAMPLING write
 							sramWrite <= '1';
-							sramAddress	<= spiAddress(18 downto 1);
-							sramWrData <= spiWrData & spiWrData;
-							state <= spiWrite1;
+							sramAddress	<= RAM_W_ADDR(18 downto 0);
+							sramWrData <= RAM_W_DATA(15 downto 0);
+							state <= samplingWrite1;
 						end if;		
 					end if;
 					
 					
-					if spiStrobe='1' then
+					--if spiStrobe='1' then
 						-- check for SPI first as it can not wait as long as DP
-						if spiWrite='0' then
-							-- SPI read
-							state <= spiRead1;
-						else
+					--	if spiWrite='0' then
+					--		-- SPI read
+					--		state <= spiRead1;
+					--	else
 							-- SPI write
-							sramWrite <= '1';
-							sramAddress	<= spiAddress(18 downto 1);
-							sramWrData <= spiWrData & spiWrData;
-							state <= spiWrite1;
-						end if;
-					elsif dpStrobe='1' then
+					--		sramWrite <= '1';
+					--		sramAddress	<= spiAddress(18 downto 1);
+					--		sramWrData <= spiWrData & spiWrData;
+					--		state <= spiWrite1;
+					--	end if;
+					--elsif dpStrobe='1' then
 						-- DP read
-						state <= dpRead1;
-					end if;
+					--	state <= dpRead1;
+					--end if;
 			   
 				when ISARead1 =>
-					  RAM_SAMPLE_RD_START <= '1';
-				     sramAddress	<= SAMPLEDATA_RD_ADDR(18 downto 0); 
-				     sramCS(0) <= not SAMPLEDATA_RD_ADDR(19);
-				     sramCS(1) <=     SAMPLEDATA_RD_ADDR(19);
+					  RAM_SAMPLE_READ_START <= '1';
+				     sramAddress	<= RAM_SAMPLE_READ_ADDR(18 downto 0); 
+				     sramCS(0) <= not RAM_SAMPLE_READ_ADDR(19);
+				     sramCS(1) <=     RAM_SAMPLE_READ_ADDR(19);
 				     sramOE <= '1';		
 				     sramUB <= '1';		
 				     sramLB <= '1';		
 				     state <= ISARead2;
 				
 				when ISARead2 =>
-					RAM_SAMPLE_RD_START <= '0';
+					RAM_SAMPLE_READ_START <= '0';
 					state <= ISARead3
 				when ISARead3 =>
 					state <= ISARead4;
-
 				when ISARead4 =>
 					state <= ISARead5;
-
 				when ISARead5 =>
 					state <= ISARead6;
-
 				when ISARead6 =>
 					state <= ISARead7;	
 				when ISARead7 =>
-					RAM_SAMPLE_RD_DONE <= '1';
-					RAM_SAMPLE_RD_DATA <= sramRdData;
+					RAM_SAMPLE_READ_DONE <= '1';
+					RAM_SAMPLE_READ_DATA <= sramRdData;
 					sramCS <= "00";
 					sramOE <= '0';		
 					sramUB <= '0';		
 					sramLB <= '0';		
 					state <= ISARead8;
 				when ISARead8 =>
-					RAM_SAMPLE_RD_DONE <= '0';
+					RAM_SAMPLE_READ_DONE <= '0';
 					state <= Idle;		
 					
 				--when dpRead1 =>
@@ -234,7 +235,7 @@ begin
 		
 		
 				when spiRead1 =>
-					spiStart <= '1';
+--					spiStart <= '1';
 					--sramAddress	<= spiAddress(19 downto 1);
 					--sramCS(0) <= not spiAddress(20);
 					--sramCS(1) <=     spiAddress(20);
@@ -242,79 +243,79 @@ begin
 					--sramUB <= '1';		
 					--sramLB <= '1';		
 					--state <= spiRead2;
-					sramAddress	<= spiAddress(18 downto 1);
-               sramCS(0) <= '1';
+--					sramAddress	<= spiAddress(18 downto 1);
+--               sramCS(0) <= '1';
 					--sramCS(1) <=     spiAddress(20);
-					sramOE <= '1';		
-					sramUB <= '1';		
-					sramLB <= '1';		
-					state <= spiRead2;
+--					sramOE <= '1';		
+--					sramUB <= '1';		
+--					sramLB <= '1';		
+--					state <= spiRead2;
 				when spiRead2 =>
-					spiStart <= '0';
-					state <= spiRead3;
+--					spiStart <= '0';
+--					state <= spiRead3;
 
 				when spiRead3 =>
-					state <= spiRead4;
+--					state <= spiRead4;
 
 				when spiRead4 =>
-					state <= spiRead5;
+--					state <= spiRead5;
 
 				when spiRead5 =>
-					state <= spiRead6;
+--					state <= spiRead6;
 
 				when spiRead6 =>
-					spiDone <= '1';
-					if spiAddress(0)='0' then
-						spiRdData <= sramRdData(7 downto 0);
-					else
-						spiRdData <= sramRdData(15 downto 8);
-					end if;
-					sramCS <= "00";
-					sramOE <= '0';		
-					sramUB <= '0';		
-					sramLB <= '0';		
-					state <= spiRead7;
+--					spiDone <= '1';
+--					if spiAddress(0)='0' then
+--						spiRdData <= sramRdData(7 downto 0);
+--					else
+--						spiRdData <= sramRdData(15 downto 8);
+--					end if;
+--					sramCS <= "00";
+--					sramOE <= '0';		
+--					sramUB <= '0';		
+--					sramLB <= '0';		
+--					state <= spiRead7;
 
 				when spiRead7 =>
-					spiDone <= '0';
+--					spiDone <= '0';
 					state <= Idle;			
 				
-				when spiWrite1 =>
-					spiStart <= '1';
-					sramCS(0) <= not spiAddress(20);
-					sramCS(1) <=     spiAddress(20);
+				when samplingWrite1 =>
+					RAM_W_START <= '1';
+					sramCS(0) <= '1'; -- not spiAddress(20);
+					sramCS(1) <=  '0'; --   spiAddress(20);
 					sramWE <= '1';		
-					if spiAddress(0)='0' then
-						sramLB <= '1';		
-					else
-						sramUB <= '1';		
-					end if;
-					state <= spiWrite2;
+--					if spiAddress(0)='0' then
+--						sramLB <= '1';		
+--					else
+--						sramUB <= '1';		
+--					end if;
+					state <= samplingWrite2;
 
-				when spiWrite2 =>
-					spiStart <= '0';
-					state <= spiWrite3;
+				when samplingWrite2 =>
+					RAM_W_START <= '0';
+					state <= samplingWrite3;
 
-				when spiWrite3 =>
-					state <= spiWrite4;
+				when samplingWrite3 =>
+					state <= samplingWrite4;
 
-				when spiWrite4 =>
-					state <= spiWrite5;
+				when samplingWrite4 =>
+					state <= samplingWrite5;
 
-				when spiWrite5 =>
-					state <= spiWrite6;
+				when samplingWrite5 =>
+					state <= samplingWrite6;
 
-				when spiWrite6 =>
-					spiDone <= '1';
+				when samplingWrite6 =>
+					RAM_W_DONE <= '1';
 					sramCS <= "00";
 					sramWE <= '0';		
 					sramUB <= '0';		
 					sramLB <= '0';		
-					state <= spiWrite7;
+					state <= samplingWrite7;
 
-				when spiWrite7 =>
+				when samplingWrite7 =>
 					sramWrite <= '0';
-					spiDone <= '0';
+					RAM_W_DONE <= '0';
 					state <= Idle;			
 								
 				when others => 
@@ -328,12 +329,16 @@ begin
 					sramUB		<= '0';
 					sramLB		<= '0';
 					spiRdData	<= (others=>'0');
-					spiStart	<= '0';
-					spiDone		<= '0';
-					dpRdData	<= (others=>'0');
-					dpRdStart	<= '0';
-					dpRdDone	<= '0';
-
+--					spiStart	<= '0';
+--					spiDone		<= '0';
+--					dpRdData	<= (others=>'0');
+--					dpRdStart	<= '0';
+--					dpRdDone	<= '0';
+			      RAM_W_START <= '0';
+			      RAM_W_DONE  <= '0';
+               RAM_SAMPLE_READ_DATA	<= (others=>'0');
+               RAM_SAMPLE_READ_START <= '0';
+			      RAM_SAMPLE_READ_DONE <= '0'
 			end case;
 		end if;
 	end process;
