@@ -31,7 +31,7 @@ entity KPSRamArbiter is
 		RAM_W_START : out std_logic;
 		RAM_W_DONE  : out std_logic;	
 		
-		ISA_MEM_RD_STROBE: in std_logic;
+		RAM_SAMPLE_READ_STROBE: in std_logic;
 		RAM_SAMPLE_READ_ADDR : in std_logic_vector(23 downto 0);
 		
 
@@ -135,10 +135,10 @@ begin
 				when Idle =>
 					sramWrite <= '0';
 					-- check if either DP or SPI requesting access
-					if ISA_MEM_READ_STROBE='1' then
+					if RAM_SAMPLE_READ_STROBE='1' then
 					   state <= ISARead1;
-               elsif RAM_STROBE='1' then
-			         if RAM_W='0' then
+               elsif RAM_W_STROBE='1' then
+			         if RAM_W_WRITE='0' then
 							-- SPI read
 							state <= spiRead1;
 						else

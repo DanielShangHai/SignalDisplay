@@ -356,7 +356,7 @@ begin
 				when RdSamplesAddrM =>
 				   OperaAddr(15 downto 8) <= data_for_write;
 					-- OperaAddr(15 downto 0) is a block address, each block has 512 bytes. so end with 9 zeros
-					SAMPLEDATA_ADDR(23 downto 0) <= OperaAddr(14 downto 8) & data_for_write(7 downto 0) & b"000000000";					
+					SAMPLEDATA_ADDR(23 downto 0) <= OperaAddr(14 downto 8) & data_for_write(7 downto 0) & b"000000000"; --9 bits					
 					p_state <= SamplesLen0;
 				when SamplesLen0 =>
 				   SampleDataLen(7 downto 0) <= data_for_write;
