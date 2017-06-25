@@ -1970,44 +1970,6 @@ agreement for further details.
 	(pt 424 160)
 )
 (connector
-	(text "reset" (rect 1250 744 1274 756)(font "Arial" ))
-	(pt 1240 760)
-	(pt 1288 760)
-)
-(connector
-	(text "clk" (rect 1250 760 1264 772)(font "Arial" ))
-	(pt 1240 776)
-	(pt 1288 776)
-)
-(connector
-	(pt 1216 792)
-	(pt 1288 792)
-)
-(connector
-	(pt 1216 808)
-	(pt 1288 808)
-)
-(connector
-	(pt 1216 824)
-	(pt 1288 824)
-)
-(connector
-	(pt 1216 840)
-	(pt 1288 840)
-)
-(connector
-	(pt 1288 888)
-	(pt 1216 888)
-)
-(connector
-	(pt 1216 872)
-	(pt 1288 872)
-)
-(connector
-	(pt 1648 792)
-	(pt 1680 792)
-)
-(connector
 	(pt 800 328)
 	(pt 824 328)
 )
@@ -2048,11 +2010,6 @@ agreement for further details.
 	(bus)
 )
 (connector
-	(pt 1288 856)
-	(pt 1216 856)
-	(bus)
-)
-(connector
 	(text "clk" (rect 514 632 528 644)(font "Arial" ))
 	(pt 504 648)
 	(pt 576 648)
@@ -2084,16 +2041,6 @@ agreement for further details.
 (connector
 	(pt 576 376)
 	(pt 256 376)
-)
-(connector
-	(pt 1648 776)
-	(pt 1680 776)
-	(bus)
-)
-(connector
-	(pt 1648 760)
-	(pt 1680 760)
-	(bus)
 )
 (connector
 	(pt -104 648)
@@ -2388,4 +2335,57 @@ agreement for further details.
 	(pt 1192 584)
 	(pt 1280 584)
 	(bus)
+)
+(connector
+	(text "reset" (rect 1250 744 1274 756)(font "Arial" ))
+	(pt 1240 760)
+	(pt 1288 760)
+)
+(connector
+	(text "clk" (rect 1250 760 1264 772)(font "Arial" ))
+	(pt 1240 776)
+	(pt 1288 776)
+)
+(connector
+	(pt 1680 760)
+	(pt 1648 760)
+	(bus)
+)
+(connector
+	(pt 1680 776)
+	(pt 1648 776)
+	(bus)
+)
+(connector
+	(pt 1216 792)
+	(pt 1288 792)
+)
+(connector
+	(pt 1680 792)
+	(pt 1648 792)
+)
+(connector
+	(pt 1216 808)
+	(pt 1288 808)
+)
+(connector
+	(pt 1216 824)
+	(pt 1288 824)
+)
+(connector
+	(pt 1216 840)
+	(pt 1288 840)
+)
+(connector
+	(pt 1216 856)
+	(pt 1288 856)
+	(bus)
+)
+(connector
+	(pt 1216 872)
+	(pt 1288 872)
+)
+(connector
+	(pt 1216 888)
+	(pt 1288 888)
 )

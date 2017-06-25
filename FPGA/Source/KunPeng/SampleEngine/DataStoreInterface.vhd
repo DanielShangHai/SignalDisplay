@@ -162,13 +162,20 @@ architecture RTL of DataStoreInterface is
 	signal EndSample0 : std_logic;
 	signal EndSample1 : std_logic;
 	signal EndSample2 : std_logic;
-	signal EndSample3 : std_logic;	
+	signal EndSample3 : std_logic;
+	
+	signal currbuff_ch0: std_logic;
+	signal currbuff_ch1: std_logic;
+	signal currbuff_ch2: std_logic;
+	signal currbuff_ch3: std_logic;
+	
 	
 	
 	type states is (IDLE, CheckDataCh0,WriteDataCh0toRAM,TimeGap0,
 	                      CheckDataCh1,WriteDataCh1toRAM,TimeGap1,
 								 CheckDataCh2,WriteDataCh2toRAM,TimeGap2, 
-								 CheckDataCh3,WriteDataCh3toRAM,TimeGap3
+								 CheckDataCh3,WriteDataCh3toRAM,TimeGap3,
+								 CheckInterrupt
 					);
 	signal state : states;
 	signal  tempcount          : std_logic_vector (7 downto 0);          -- used for various delays
@@ -421,10 +428,12 @@ begin
 						currentchannel <= b"0000";				
 				      if tempcount=x"02" then
 		               tempcount <= x"00";
-		               state <= IDLE;
+		               state <= CheckInterrupt;
 	               else
 		               tempcount <= tempcount + '1';
-	               end if;						
+	               end if;				
+				  when CheckInterrupt =>
+				      state <= IDLE;  
 				  when others =>
 				      RAM_STROBE <= '0';
 						RAM_WRITE  <= '0';
@@ -537,104 +546,188 @@ begin
 						 end if;
 					 
 					 elsif mode0 = b"00000010" then --single sampling but len larger than buffer; 
-					    if sample_countInBuffer0 < interruptThreshold0 - 1 then
-						    sample_countInBuffer0 <= sample_count0 + 1;
-							 addressCh0(20 downto 0) <= addressCh0(20 downto 0) + 1;
+					    if sample_count0 < sampleLen_ch0 - 1 then
+                      sample_count0 <= sample_count0 + 1;
+					       if sample_countInBuffer0 < interruptThreshold0 - 1 then
+						       sample_countInBuffer0 <= sample_countInBuffer0 + 1;							 
+							    addressCh0(20 downto 0) <= addressCh0(20 downto 0) + 1;
+						    else
+						       if currbuff_ch0 = 0 then
+							       currbuff_ch0 <= 1; 
+								    addressCh0(20 downto 0) <= addressCh0(20 downto 0) + 1;
+							    else
+							       currbuff_ch0 <= 0;
+								    addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
+							    end if;
+						       sample_countInBuffer0 <= x"00000000";							 
+							    raiseInterrupt0 <= 1;
+						    end if;						 
 						 else
-						    if currbuff_ch0 = 0 then
-							    currbuff_ch0 <= 1; 
-								 addressCh0(20 downto 0) <= addressCh0(20 downto 0) + 1;
-							 else
-							    currbuff_ch0 <= 0;
-								 addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
-							 end if;
-						    sample_countInBuffer0 <= x"00000000";
-							 
-							 raiseInterrupt0 <= 1;
+						    raiseInterrupt0 <= 1;	
+		                EndSample0 <= '1';					 
 						 end if;
+						 
 					    if sample_count0 < sampleLen_ch0 - 1 then
 						    sample_count0 <= sample_count0 + 1;
 						 else
 						    raiseInterrupt0 <= 1;
 						    EndSample0 <= '1';
-						 end if;
-					 
-				    end if;
-				 
-				    --if mode0 = b"00000000" then  -- single sample
-					    if sample_countInBuffer0 < interruptThreshold0 - 1 then 
-						    sample_countInBuffer0 <= sample_countInBuffer0 + 1;
-							 --if addressCh0(20 downto 0) < addr_e_ch0(20 downto 0) then 
-					       addressCh0(20 downto 0) <= addressCh0(20 downto 0) + 1;
-					       --else
-					       --   addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
-					       --end if
-					    else
-						    sample_countInBuffer0 <= x"00000000";
-							 addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
-							 raiseInterrupt0 <= 1;
-							 if mode0 = b"00000000" then
-							    EndSample0 <= '1';
-							 end if;
-						 end if;				 
-					 --elsif mode0 = b"00000001" then --continuous sampling; 
-					 --end if;
-				        if sample_count0 < sampleLen_ch0 - 1 then
-						     sample_count0 <= sample_count0 + 1;
-						  else
-						     sample_count0 <= x"00000000";
-							  raiseInterrupt0 <= '1';
-							  if mode0 = b"00000000" then  -- single sample
-							     EndSample0 <= '1';
-							  end if;
-						  end if;
-				 
-				    if sample_count0 < interruptThreshold0 - 1 then 
-				       if addressCh0(20 downto 0) < addr_e_ch0(20 downto 0) then 
-					       addressCh0(20 downto 0) <= addressCh0(20 downto 0) + 1;
-					    else
-					       addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
-					    end if
-					 else 
-					    if mode0 = b"00000000" then  -- single sample
-						    -- sample_stop0 = '1' ;
-						 elsif mode0 = b"00000001" then  --continuous sampling;
-						 
-						 end if			 
-					 end if;
-				    
-				    sample_count0 <= sample_count0 + 1;
-					 if sample_countInBuffer1 < x"00008000" - 1
-					    sample_countInBuffer1 <= sample_countInBuffer1 + 1;
-					 else
-					    sample_countInBuffer1 <= x"00000000";
-					 end if;
-				    if (addressCh0(20 downto 0) < addr_e_ch0(20 downto 0)) then 
-					     addressCh0(20 downto 0) <= addressCh0(20 downto 0) + 1;
-					 else
-					     addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
-					 end if;				    
+						 end if;					 
+				    end if;			    
 				 end if;
 			    if (enabled_ch1 = '1') and (currentchannel = b"0010") then
-				    if addressCh1(20 downto 0) < addr_e_ch1(20 downto 0) then 
-					     addressCh1(20 downto 0) <= addressCh1(20 downto 0) + 1;
-					 else
-					    addressCh1(20 downto 0) <= addr_s_ch1(11 downto 0) & b"000000000" ;
-					 end if;				    
+				    if mode1 = b"00000000" then  -- single sample
+					    if sample_count1 < interruptThreshold1 - 1 then
+						    sample_count1 <= sample_count1 + 1;
+							 addressCh1(20 downto 0) <= addressCh1(20 downto 0) + 1;
+						 else
+						    raiseInterrupt1 <= 1;
+						    EndSample1 <= '1';
+						 end if;
+					 elsif mode1 = b"00000001" then --continuous sampling; 
+					    if sample_count1 < interruptThreshold1 - 1 then
+						    sample_count1 <= sample_count1 + 1;
+							 addressCh1(20 downto 0) <= addressCh1(20 downto 0) + 1;
+						 else
+						    if currbuff_ch1 = 0 then
+							    currbuff_ch1 <= 1; 
+								 addressCh1(20 downto 0) <= addressCh1(20 downto 0) + 1;
+							 else
+							    currbuff_ch1 <= 0;
+								 addressCh1(20 downto 0) <= addr_s_ch1(11 downto 0) & b"000000000" ;
+							 end if;
+						    sample_count1 <= x"00000000";							 
+							 raiseInterrupt1 <= 1;
+						 end if;
+					 
+					 elsif mode1 = b"00000010" then --single sampling but len larger than buffer; 
+					    if sample_count1 < sampleLen_ch1 - 1 then
+                      sample_count1 <= sample_count1 + 1;
+					       if sample_countInBuffer1 < interruptThreshold1 - 1 then
+						       sample_countInBuffer1 <= sample_countInBuffer1 + 1;							 
+							    addressCh1(20 downto 0) <= addressCh1(20 downto 0) + 1;
+						    else
+						       if currbuff_ch1 = 0 then
+							       currbuff_ch1 <= 1; 
+								    addressCh1(20 downto 0) <= addressCh1(20 downto 0) + 1;
+							    else
+							       currbuff_ch1 <= 0;
+								    addressCh1(20 downto 0) <= addr_s_ch1(11 downto 0) & b"000000000" ;
+							    end if;
+						       sample_countInBuffer1 <= x"00000000";							 
+							    raiseInterrupt1 <= 1;
+						    end if;						 
+						 else
+						    raiseInterrupt1 <= 1;	
+		                EndSample1 <= '1';					 
+						 end if;
+						 
+					    if sample_count1 < sampleLen_ch1 - 1 then
+						    sample_count1 <= sample_count1 + 1;
+						 else
+						    raiseInterrupt1 <= 1;
+						    EndSample1 <= '1';
+						 end if;					 
+				    end if;				    
 				 end if;
 			    if (enabled_ch2 = '1') and (currentchannel = b"0011") then
-				    if addressCh2(20 downto 0) < addr_e_ch2(20 downto 0) then 
-					     addressCh2(20 downto 0) <= addressCh2(20 downto 0) + 1;
-					 else
-					     addressCh2(20 downto 0) <= addr_s_ch2(11 downto 0) & b"000000000" ;
-					 end if;				    
+				    if mode2 = b"00000000" then  -- single sample
+					    if sample_count2 < interruptThreshold2 - 1 then
+						    sample_count2 <= sample_count2 + 1;
+							 addressCh2(20 downto 0) <= addressCh2(20 downto 0) + 1;
+						 else
+						    raiseInterrupt2 <= 1;
+						    EndSample2 <= '1';
+						 end if;
+					 elsif mode2 = b"00000001" then --continuous sampling; 
+					    if sample_count2 < interruptThreshold2 - 1 then
+						    sample_count2 <= sample_count2 + 1;
+							 addressCh2(20 downto 0) <= addressCh2(20 downto 0) + 1;
+						 else
+						    if currbuff_ch2 = 0 then
+							    currbuff_ch2 <= 1; 
+								 addressCh2(20 downto 0) <= addressCh2(20 downto 0) + 1;
+							 else
+							    currbuff_ch2 <= 0;
+								 addressCh2(20 downto 0) <= addr_s_ch2(11 downto 0) & b"000000000" ;
+							 end if;
+						    sample_count2 <= x"00000000";							 
+							 raiseInterrupt2 <= 1;
+						 end if;
+					 
+					 elsif mode2 = b"00000010" then --single sampling but len larger than buffer; 
+					    if sample_count2 < sampleLen_ch2 - 1 then
+                      sample_count2 <= sample_count2 + 1;
+					       if sample_countInBuffer2 < interruptThreshold2 - 1 then
+						       sample_countInBuffer2 <= sample_countInBuffer2 + 1;							 
+							    addressCh2(20 downto 0) <= addressCh2(20 downto 0) + 1;
+						    else
+						       if currbuff_ch2 = 0 then
+							       currbuff_ch2 <= 1; 
+								    addressCh2(20 downto 0) <= addressCh2(20 downto 0) + 1;
+							    else
+							       currbuff_ch2 <= 0;
+								    addressCh2(20 downto 0) <= addr_s_ch2(11 downto 0) & b"000000000" ;
+							    end if;
+						       sample_countInBuffer2 <= x"00000000";							 
+							    raiseInterrupt2 <= 1;
+						    end if;						 
+						 else
+						    raiseInterrupt2 <= 1;	
+		                EndSample2 <= '1';					 
+						 end if;
+						 
+		 
+				    end if;				    
 				 end if;
 			    if (enabled_ch3 = '1') and (currentchannel = b"0100") then
-				    if addressCh3(20 downto 0) < addr_e_ch3(20 downto 0) then 
-					     addressCh3(20 downto 0) <= addressCh3(20 downto 0) + 1;
-					 else
-					     addressCh3(20 downto 0) <= addr_s_ch3(11 downto 0) & b"000000000" ;
-					 end if;				    
+				    if mode3 = b"00000000" then  -- single sample
+					    if sample_count3 < interruptThreshold3 - 1 then
+						    sample_count3 <= sample_count3 + 1;
+							 addressCh3(20 downto 0) <= addressCh3(20 downto 0) + 1;
+						 else
+						    raiseInterrupt3 <= 1;
+						    EndSample3 <= '1';
+						 end if;
+					 elsif mode3 = b"00000001" then --continuous sampling; 
+					    if sample_count3 < interruptThreshold3 - 1 then
+						    sample_count3 <= sample_count3 + 1;
+							 addressCh3(20 downto 0) <= addressCh3(20 downto 0) + 1;
+						 else
+						    if currbuff_ch3 = 0 then
+							    currbuff_ch3 <= 1; 
+								 addressCh3(20 downto 0) <= addressCh3(20 downto 0) + 1;
+							 else
+							    currbuff_ch3 <= 0;
+								 addressCh3(20 downto 0) <= addr_s_ch3(11 downto 0) & b"000000000" ;
+							 end if;
+						    sample_count3 <= x"00000000";							 
+							 raiseInterrupt3 <= 1;
+						 end if;
+					 
+					 elsif mode3 = b"00000010" then --single sampling but len larger than buffer; 
+					    if sample_count3 < sampleLen_ch3 - 1 then
+                      sample_count3 <= sample_count3 + 1;
+					       if sample_countInBuffer3 < interruptThreshold3 - 1 then
+						       sample_countInBuffer3 <= sample_countInBuffer3 + 1;							 
+							    addressCh3(20 downto 0) <= addressCh3(20 downto 0) + 1;
+						    else
+						       if currbuff_ch3 = 0 then
+							       currbuff_ch3 <= 1; 
+								    addressCh3(20 downto 0) <= addressCh3(20 downto 0) + 1;
+							    else
+							       currbuff_ch3 <= 0;
+								    addressCh3(20 downto 0) <= addr_s_ch3(11 downto 0) & b"000000000" ;
+							    end if;
+						       sample_countInBuffer3 <= x"00000000";							 
+							    raiseInterrupt3 <= 1;
+						    end if;						 
+						 else
+						    raiseInterrupt3 <= 1;	
+		                EndSample3 <= '1';					 
+						 end if;
+						 			 
+				    end if;					    
 				 end if;				 
 			
  			end if;
