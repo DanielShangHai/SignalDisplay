@@ -29,6 +29,7 @@ entity DataStoreInterface is
 		addr_e_ch0     : in std_logic_vector(15 downto 0);
 		mode0          : in std_logic_vector(7 downto 0);
 		sampleLen_ch0  : in std_logic_vector(31 downto 0);
+
 		
 		
 		adc_data_ch1   : in std_logic_vector(15 downto 0);
@@ -39,6 +40,7 @@ entity DataStoreInterface is
 		addr_e_ch1     : in std_logic_vector(15 downto 0);
 		mode1          : in std_logic_vector(7 downto 0);
 		sampleLen_ch1  : in std_logic_vector(31 downto 0);
+
 	
 		adc_data_ch2   : in std_logic_vector(15 downto 0);
 		newSample_ch2  : in std_logic;
@@ -48,7 +50,7 @@ entity DataStoreInterface is
 		addr_e_ch2     : in std_logic_vector(15 downto 0);
 		mode2          : in std_logic_vector(7 downto 0);
 		sampleLen_ch2  : in std_logic_vector(31 downto 0);
-
+  
 
 		
 		adc_data_ch3   : in std_logic_vector(15 downto 0);
@@ -59,7 +61,7 @@ entity DataStoreInterface is
 		addr_e_ch3     : in std_logic_vector(15 downto 0);
 		mode3          : in std_logic_vector(7 downto 0);
 		sampleLen_ch3  : in std_logic_vector(31 downto 0);
-		
+
 		
 		Mode_Ch0       : in std_logic_vector(7 downto 0);
 		Mode_Ch1       : in std_logic_vector(7 downto 0);
@@ -301,6 +303,38 @@ begin
 	
 	
 	
+			  : out std_logic;
+		sample_stop_ch1  : out std_logic;
+		sample_stop_ch2  : out std_logic;
+		sample_stop_ch3  : out std_logic;
+	process (clk, reset)
+	begin
+		if reset='1' then
+		   sample_stop_ch0 <= '0';
+			sample_stop_ch1 <= '0';
+			sample_stop_ch2 <= '0';
+			sample_stop_ch3 <= '0';
+		elsif rising_edge(clk) then
+			sample_stop_ch0 <= '0';
+			sample_stop_ch1 <= '0';
+			sample_stop_ch2 <= '0';
+			sample_stop_ch3 <= '0';
+		   if EndSample0='1' then 
+            sample_stop_ch0 <= '1';
+			end if;
+		   if EndSample1='1' then 
+            sample_stop_ch1 <= '1';
+			end if;
+		   if EndSample2='1' then 
+            sample_stop_ch2 <= '1';
+			end if;
+		   if EndSample3='1' then 
+            sample_stop_ch3 <= '1';
+			end if;			
+		end if;
+	end process;
+	
+	
 	
 	-- state machine	
 	process (clk, reset)
@@ -457,6 +491,12 @@ begin
 		end if;
 	end process;
 	
+
+	
+	raiseInterrupt0
+	
+	
+	
 	
 	process (clk, reset)
 	begin
@@ -467,6 +507,13 @@ begin
          addressCh3 <= (others => '0');
 		elsif rising_edge(clk) then
 		   EndSample0 <= '0';
+			EndSample1 <= '0';
+			EndSample2 <= '0';
+			EndSample3 <= '0';
+			raiseInterrupt0 <= '0';
+			raiseInterrupt1 <= '0';
+			raiseInterrupt2 <= '0';
+			raiseInterrupt3 <= '0';
          if (SAMPLE_STARTB='1') and (SAMPLE_STARTC='0') then 
 			    if enabled_ch0 = '1' then
 				    sample_countInBuffer0 <= x"00000000";

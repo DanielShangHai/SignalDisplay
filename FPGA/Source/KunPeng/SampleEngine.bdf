@@ -2389,3 +2389,11 @@ agreement for further details.
 	(pt 1216 888)
 	(pt 1288 888)
 )
+(connector
+	(pt 24 464)
+	(pt -112 464)
+)
+(connector
+	(pt 16 240)
+	(pt -120 240)
+)
