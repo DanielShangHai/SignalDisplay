@@ -347,8 +347,11 @@ begin
 			RAM_STROBE <= '0';
 			tempcount <= (others => '0');
 			currentchannel <= (others => '0');
+			interrupt <= '0';
 		elsif rising_edge(clk) then
-		   
+		   if interruptClr = '1' then
+			   interrupt <= '0';
+		   end if;	
 		   case state is 
 			     when IDLE =>
 				      state <= CheckDataCh0;
@@ -360,7 +363,9 @@ begin
 		               RAM_ADDRESS <= b"0000" & addressCh0(19 downto 0);
 		               RAM_WRITE  <= '1' ;
 							state <= WriteDataCh0toRAM;		
-                     currentchannel <= b"0001";							
+                     currentchannel <= b"0001";	
+                  else
+                     state <= CheckDataCh1;			
 						end if;
 				  when WriteDataCh0toRAM =>
 				      RAM_STROBE <= '1';
@@ -389,7 +394,9 @@ begin
 		               RAM_ADDRESS <=  b"0000" & addressCh1(19 downto 0);  
 		               RAM_WRITE  <= '1' ;
 							state <= WriteDataCh1toRAM;
-							currentchannel <= b"0010";									
+							currentchannel <= b"0010";		
+						else
+                     state <= CheckDataCh2;				
 						end if;
 				  when WriteDataCh1toRAM =>
 				      RAM_STROBE <= '1';
@@ -417,7 +424,9 @@ begin
 		               RAM_ADDRESS <=  b"0000" & addressCh2(19 downto 0);  
 		               RAM_WRITE  <= '1' ;
 							state <= WriteDataCh2toRAM;		
-                     currentchannel <= b"0011";											
+                     currentchannel <= b"0011";		
+						else
+                     state <= CheckDataCh3;	
 						end if;
 				  when WriteDataCh2toRAM =>
 				      RAM_STROBE <= '1';
@@ -446,7 +455,9 @@ begin
 		               RAM_ADDRESS <=  b"0000" & addressCh3(19 downto 0);  
 		               RAM_WRITE  <= '1' ;
 							state <= WriteDataCh3toRAM;
-                     currentchannel <= b"0100";											
+                     currentchannel <= b"0100";	
+                  else
+                     state <= CheckInterrupt;										
 						end if;
 				  when WriteDataCh3toRAM =>
 				      RAM_STROBE <= '1';
@@ -467,6 +478,9 @@ begin
 		               tempcount <= tempcount + '1';
 	               end if;				
 				  when CheckInterrupt =>
+				      if InterruptChannel0 AND InterruptChannel1 AND InterruptChannel2 AND InterruptChannel3 then
+						    interrupt <= '1';
+						end if;
 				      state <= IDLE;  
 				  when others =>
 				      RAM_STROBE <= '0';
@@ -491,11 +505,84 @@ begin
 		end if;
 	end process;
 	
+	process (clk, reset)
+	begin
+		if reset='1' then
+			raiseInterrupt0A <= '0';
+			--raiseInterrupt0B <= '0';
+		elsif rising_edge(clk) then
+			raiseInterrupt0A <= raiseInterrupt0;
+			--raiseInterrupt0B <= raiseInterrupt0A;
+		end if;
+	end process;
+	
+	process (clk, reset)
+	begin
+		if reset='1' then
+			raiseInterrupt1A <= '0';
+			--raiseInterrupt1B <= '0';
+		elsif rising_edge(clk) then
+			raiseInterrupt1A <= raiseInterrupt1;
+			--raiseInterrupt1B <= raiseInterrupt1A;
+		end if;
+	end process;
+	
+	process (clk, reset)
+	begin
+		if reset='1' then
+			raiseInterrupt2A <= '0';
+			--raiseInterrupt2B <= '0';
+		elsif rising_edge(clk) then
+			raiseInterrupt2A <= raiseInterrupt2;
+			--raiseInterrupt2B <= raiseInterrupt2A;
+		end if;
+	end process;	
+	
+	process (clk, reset)
+	begin
+		if reset='1' then
+			raiseInterrupt3A <= '0';
+			--raiseInterrupt3B <= '0';
+		elsif rising_edge(clk) then
+			raiseInterrupt3A <= raiseInterrupt3;
+			--raiseInterrupt3B <= raiseInterrupt3A;
+		end if;
+	end process;	
+	
+	process (clk, reset)
+	begin
+		if reset='1' then
+			InterruptChannel0 <= '0';
+			InterruptChannel1 <= '0';
+			InterruptChannel2 <= '0';
+			InterruptChannel3 <= '0';			
+		elsif rising_edge(clk) then
+         if raiseInterrupt0 = '1' then
+			   InterruptChannel0 <= '1';
+			else if interruptClr = '1' then
+			   InterruptChannel0 = '0';
+			end if;
+			
+			if raiseInterrupt1 = '1' then
+			   InterruptChannel1 <= '1';
+			else if interruptClr = '1' then
+			   InterruptChannel1 = '0';
+			end if;
 
-	
-	raiseInterrupt0
-	
-	
+			if raiseInterrupt2 = '1' then
+			   InterruptChannel2 <= '1';
+			else if interruptClr = '1' then
+			   InterruptChannel2 = '0';
+			end if;
+
+			if raiseInterrupt3 = '1' then
+			   InterruptChannel3 <= '1';
+			else if interruptClr = '1' then
+			   InterruptChannel3 = '0';
+			end if;			
+			
+		end if;
+	end process;
 	
 	
 	process (clk, reset)
