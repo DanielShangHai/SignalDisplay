@@ -69,7 +69,7 @@ entity KPSRamArbiter is
 			
 		
 			
---		TEST			: out	std_logic_vector(7 downto 0)
+	  TEST			: out	std_logic_vector(7 downto 0)
 	);
 end KPSRamArbiter;
 
@@ -79,11 +79,11 @@ architecture RTL of KPSRamArbiter is
 	--				dpRead1, dpRead2, dpRead3, dpRead4, dpRead5, dpRead6, dpRead7, dpRead8, 
 	--				spiWrite1, spiWrite2, spiWrite3, spiWrite4, spiWrite5, spiWrite6, spiWrite7, 
 	--				spiRead1, spiRead2, spiRead3, spiRead4, spiRead5, spiRead6, spiRead7);
-					
+
 					
 	type States is (Idle,
-					ISARead1, ISARead2, ISARead3, dpRead4, dpRead5, dpRead6, dpRead7, dpRead8, 
-					spiWrite1, spiWrite2, spiWrite3, spiWrite4, spiWrite5, spiWrite6, spiWrite7, 
+					ISARead1, ISARead2, ISARead3, ISARead4,ISARead5,ISARead6,ISARead7,ISARead8, samplingWrite1, samplingWrite2,
+					samplingWrite3, samplingWrite4, samplingWrite5, samplingWrite6, samplingWrite7, 
 					spiRead1, spiRead2, spiRead3, spiRead4, spiRead5, spiRead6, spiRead7);				
 					
 	signal state : States;
@@ -105,7 +105,7 @@ begin
 --	TEST(2) <= spiStrobe ;
 --	TEST(3) <= sramWrite ;    
 --	TEST(4) <= '1' when sram_Data(7 downto 0)=x"5A" else '0';
-	
+
 	process (clk, reset)
 	begin
 		if reset='1' then
@@ -180,7 +180,7 @@ begin
 				
 				when ISARead2 =>
 					RAM_SAMPLE_READ_START <= '0';
-					state <= ISARead3
+					state <= ISARead3;
 				when ISARead3 =>
 					state <= ISARead4;
 				when ISARead4 =>
@@ -328,7 +328,7 @@ begin
 					sramWE		<= '0';
 					sramUB		<= '0';
 					sramLB		<= '0';
-					spiRdData	<= (others=>'0');
+					--spiRdData	<= (others=>'0');
 --					spiStart	<= '0';
 --					spiDone		<= '0';
 --					dpRdData	<= (others=>'0');
@@ -338,7 +338,7 @@ begin
 			      RAM_W_DONE  <= '0';
                RAM_SAMPLE_READ_DATA	<= (others=>'0');
                RAM_SAMPLE_READ_START <= '0';
-			      RAM_SAMPLE_READ_DONE <= '0'
+			      RAM_SAMPLE_READ_DONE <= '0';
 			end case;
 		end if;
 	end process;
