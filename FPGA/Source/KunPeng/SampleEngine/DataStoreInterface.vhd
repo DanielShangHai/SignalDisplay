@@ -63,10 +63,7 @@ entity DataStoreInterface is
 		sampleLen_ch3  : in std_logic_vector(31 downto 0);
 
 		
-		Mode_Ch0       : in std_logic_vector(7 downto 0);
-		Mode_Ch1       : in std_logic_vector(7 downto 0);
-		Mode_Ch2       : in std_logic_vector(7 downto 0);
-		Mode_Ch3       : in std_logic_vector(7 downto 0);
+
 		
 		sample_stop_ch0  : out std_logic;
 		sample_stop_ch1  : out std_logic;

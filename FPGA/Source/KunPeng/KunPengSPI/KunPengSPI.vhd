@@ -83,6 +83,10 @@ entity KunPengSPI is
 		ADDR_S_CH3     : out std_logic_vector(15 downto 0);
 		ADDR_E_CH3     : out std_logic_vector(15 downto 0);		
 		
+		MODE_0         : out std_logic_vector(7 downto 0);
+		MODE_1         : out std_logic_vector(7 downto 0);
+		MODE_2         : out std_logic_vector(7 downto 0);
+		MODE_3         : out std_logic_vector(7 downto 0);
 		
 		-- interface to arbiter to write to memory
 		SRAMWrAddr		: buffer std_logic_vector(20 downto 0);
@@ -207,8 +211,14 @@ architecture RTL of KunPengSPI is
 	constant addr_ADDR_S_CH3_1 : integer :=  50;
 	constant addr_ADDR_E_CH3_0 : integer :=  51;
 	constant addr_ADDR_E_CH3_1 : integer :=  52;
+	
+	constant addr_MODE_0 : integer :=  53;
+	constant addr_MODE_1 : integer :=  54;
+	constant addr_MODE_2 : integer :=  55;
+	constant addr_MODE_3 : integer :=  56;
 
-   constant addr_max_wrparam	: integer :=  53;
+
+   constant addr_max_wrparam	: integer :=  57;
 	
 	-- read parameter addresses
 	constant addr_KPTYPE		   : integer :=  0;
@@ -766,7 +776,10 @@ begin
 	
 	ADDR_S_CH3(15 downto 0)   <= wr_params(addr_ADDR_S_CH3_1)(7 downto 0) & wr_params(addr_ADDR_S_CH3_0)(7 downto 0);
 	ADDR_E_CH3(15 downto 0)   <= wr_params(addr_ADDR_E_CH3_1)(7 downto 0) & wr_params(addr_ADDR_E_CH3_0)(7 downto 0);
-	
+	MODE_0(7 downto 0)        <= wr_params(addr_MODE_0)(7 downto 0);
+	MODE_1(7 downto 0)        <= wr_params(addr_MODE_1)(7 downto 0);
+	MODE_2(7 downto 0)        <= wr_params(addr_MODE_2)(7 downto 0);
+	MODE_3(7 downto 0)        <= wr_params(addr_MODE_3)(7 downto 0);
  --s  TESTCTRL		   <= wr_params(addr_TESTCTRL);
 
 
