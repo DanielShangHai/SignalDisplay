@@ -11,6 +11,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.std_logic_arith.all;
 
+
 entity DataStoreInterface is
 	generic (
 		data_width			: in	integer := 16;
@@ -665,7 +666,7 @@ begin
 					 sample_count0 <= x"00000000";
 				 --  21 BITS                                 12BITS         9BITS
 				    addressCh0(20 downto 0) <= addr_s_ch0(11 downto 0) & b"000000000" ;
-					 addressCh0_buf2(20 downto 0) <= '0'&addr_s_ch0(10 downto 1)& b"000000000" + '0'&addr_e_ch0(10 downto 1)& b"000000000";
+					 addressCh0_buf2(20 downto 0) <= b"00"&addr_s_ch0(10 downto 1)& b"000000000" + CONV_INTEGER('0'&addr_e_ch0(10 downto 1)& b"000000000");
 					 addressEndCh0(20 downto 0) <= addr_e_ch0(11 downto 0) & b"000000000" ;
 					 halfSampleLen0(31 downto 0) <= '0'&sampleLen_ch0(31 downto 1);
 					 if mode0 = b"00000000" then  -- single sample

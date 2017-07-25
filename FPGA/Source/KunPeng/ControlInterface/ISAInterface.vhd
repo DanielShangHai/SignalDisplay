@@ -365,7 +365,7 @@ begin
 				   SampleDataLen(15 downto 8) <= data_for_write;
 				   p_state <= SamplesLen2;
 				when SamplesLen2 =>
-				   SampleDataLen(23 downto 15) <= data_for_write;
+				   SampleDataLen(23 downto 16) <= data_for_write;
 				   p_state <= SamplesLen3;
 				when SamplesLen3 =>
 				   SampleDataLen(31 downto 24) <= data_for_write;

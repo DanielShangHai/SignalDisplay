@@ -21,9 +21,9 @@ agreement for further details.
 */
 (header "symbol" (version "1.1"))
 (symbol
-	(rect 16 16 456 256)
-	(text "KPSRAMArbiter" (rect 5 0 76 12)(font "Arial" ))
-	(text "inst" (rect 8 224 20 236)(font "Arial" ))
+	(rect 16 16 456 288)
+	(text "KPSRamArbiter" (rect 5 0 73 12)(font "Arial" ))
+	(text "inst" (rect 8 256 20 268)(font "Arial" ))
 	(port
 		(pt 0 32)
 		(input)
@@ -118,8 +118,8 @@ agreement for further details.
 	(port
 		(pt 440 112)
 		(output)
-		(text "sramAddress[17..0]" (rect 0 0 80 12)(font "Arial" ))
-		(text "sramAddress[17..0]" (rect 339 107 419 119)(font "Arial" ))
+		(text "sramAddress[18..0]" (rect 0 0 80 12)(font "Arial" ))
+		(text "sramAddress[18..0]" (rect 339 107 419 119)(font "Arial" ))
 		(line (pt 440 112)(pt 424 112)(line_width 3))
 	)
 	(port
@@ -158,6 +158,13 @@ agreement for further details.
 		(line (pt 440 208)(pt 424 208)(line_width 1))
 	)
 	(port
+		(pt 440 224)
+		(output)
+		(text "TEST[7..0]" (rect 0 0 44 12)(font "Arial" ))
+		(text "TEST[7..0]" (rect 375 219 419 231)(font "Arial" ))
+		(line (pt 440 224)(pt 424 224)(line_width 3))
+	)
+	(port
 		(pt 440 128)
 		(bidir)
 		(text "sram_Data[15..0]" (rect 0 0 69 12)(font "Arial" ))
@@ -165,6 +172,6 @@ agreement for further details.
 		(line (pt 440 128)(pt 424 128)(line_width 3))
 	)
 	(drawing
-		(rectangle (rect 16 16 424 224)(line_width 1))
+		(rectangle (rect 16 16 424 256)(line_width 1))
 	)
 )

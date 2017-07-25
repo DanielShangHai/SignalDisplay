@@ -740,25 +740,25 @@ begin
 	INTCTRL        <= wr_params(addr_INTCTRL_L)(3 downto 0);
 	DAQ_START      <= wr_params(addr_DAQ_START_M)(7 downto 0) & wr_params(addr_DAQ_START_L)(7 downto 0);
 	CH0SRATE       <= wr_params(addr_CH0SRATE_3)(7 downto 0) & wr_params(addr_CH0SRATE_2)(7 downto 0) & wr_params(addr_CH0SRATE_1)(7 downto 0) & wr_params(addr_CH0SRATE_0)(7 downto 0);
-	CH0DELAY       <= wr_params(addr_CH0DELAY_1)(7 downto 0) & wr_params(addr_CH0DELAY_0)(7 downto 0);
+	--CH0DELAY       <= wr_params(addr_CH0DELAY_1)(7 downto 0) & wr_params(addr_CH0DELAY_0)(7 downto 0);
 	
 	CH0LENGTH      <= wr_params(addr_CH0SLEN_3)(7 downto 0) & wr_params(addr_CH0SLEN_2)(7 downto 0) & wr_params(addr_CH0SLEN_1)(7 downto 0) & wr_params(addr_CH0SLEN_0)(7 downto 0);
 	CH0ENABLE      <= wr_params(addr_CH0ENABLE)(0);
 	
    CH1SRATE       <= wr_params(addr_CH1SRATE_3)(7 downto 0) & wr_params(addr_CH1SRATE_2)(7 downto 0) & wr_params(addr_CH1SRATE_1)(7 downto 0) & wr_params(addr_CH1SRATE_0)(7 downto 0);
-	CH1DELAY       <= wr_params(addr_CH1DELAY_1)(7 downto 0) & wr_params(addr_CH1DELAY_0)(7 downto 0);
+	--CH1DELAY       <= wr_params(addr_CH1DELAY_1)(7 downto 0) & wr_params(addr_CH1DELAY_0)(7 downto 0);
 	
 	CH1LENGTH      <= wr_params(addr_CH1SLEN_3)(7 downto 0) & wr_params(addr_CH1SLEN_2)(7 downto 0) & wr_params(addr_CH1SLEN_1)(7 downto 0) & wr_params(addr_CH1SLEN_0)(7 downto 0);
 	CH1ENABLE      <= wr_params(addr_CH1ENABLE)(0);
 	
 	CH2SRATE       <= wr_params(addr_CH2SRATE_3)(7 downto 0) & wr_params(addr_CH2SRATE_2)(7 downto 0) & wr_params(addr_CH2SRATE_1)(7 downto 0) & wr_params(addr_CH2SRATE_0)(7 downto 0);
-	CH2DELAY       <= wr_params(addr_CH2DELAY_1)(7 downto 0) & wr_params(addr_CH2DELAY_0)(7 downto 0);
+	--CH2DELAY       <= wr_params(addr_CH2DELAY_1)(7 downto 0) & wr_params(addr_CH2DELAY_0)(7 downto 0);
 	
 	CH2LENGTH      <= wr_params(addr_CH2SLEN_3)(7 downto 0) & wr_params(addr_CH2SLEN_2)(7 downto 0) & wr_params(addr_CH2SLEN_1)(7 downto 0) & wr_params(addr_CH2SLEN_0)(7 downto 0);
 	CH2ENABLE      <= wr_params(addr_CH2ENABLE)(0);
 
    CH3SRATE       <= wr_params(addr_CH3SRATE_3)(7 downto 0) & wr_params(addr_CH3SRATE_2)(7 downto 0) & wr_params(addr_CH3SRATE_1)(7 downto 0) & wr_params(addr_CH3SRATE_0)(7 downto 0);
-	CH3DELAY       <= wr_params(addr_CH3DELAY_1)(7 downto 0) & wr_params(addr_CH3DELAY_0)(7 downto 0);
+	--CH3DELAY       <= wr_params(addr_CH3DELAY_1)(7 downto 0) & wr_params(addr_CH3DELAY_0)(7 downto 0);
 	
 	CH3LENGTH      <= wr_params(addr_CH3SLEN_3)(7 downto 0) & wr_params(addr_CH3SLEN_2)(7 downto 0) & wr_params(addr_CH3SLEN_1)(7 downto 0) & wr_params(addr_CH3SLEN_0)(7 downto 0);
 	CH3ENABLE      <= wr_params(addr_CH3ENABLE)(0);
