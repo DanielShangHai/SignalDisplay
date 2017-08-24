@@ -9,8 +9,9 @@
 int main( int argc, char *argv[] )
 {
 	char action = '\0';
-	unsigned short length = 0;
-	unsigned char addr = 0;
+	int length = 0;
+	int addr = 0;
+	int bufChar;
 
 	CpuFpgaTool tool;
 
@@ -32,11 +33,12 @@ int main( int argc, char *argv[] )
 			unsigned char* buff = FpgaRegsData::instance().getAddrRegW(addr);
 			for(int i = 0; i < length; ++i) {
 				printf("Please enter No.%d byte (HEX):\n", i);
-				scanf("%x", &buff[i]);
+				scanf("%x", &bufChar);
+				buff[i] = (unsigned char)bufChar;
 			}
 
 			// do write
-			if (tool.writeParams(addr, length, buff)) {
+			if (tool.writeParams((unsigned char)addr, (unsigned short)length, buff)) {
 				printf("writeParams OK\n");
 			} else {
 				printf("writeParams Fail\n");
@@ -54,7 +56,7 @@ int main( int argc, char *argv[] )
 
 			unsigned char* buff = FpgaRegsData::instance().getAddrRegR(addr);
 			// do read
-			if (tool.readParams(addr, length, buff)) {
+			if (tool.readParams((unsigned char)addr, (unsigned short)length, buff)) {
 				printf("readParams OK\n");
 			} else {
 				printf("readParams Fail\n");
@@ -65,6 +67,3 @@ int main( int argc, char *argv[] )
 	}
 	return 0;
 }
-
-
-
